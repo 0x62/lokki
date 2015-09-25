@@ -1,0 +1,18 @@
+{
+  "name":"lokki",
+  "scripts":{},
+  "env":{
+    "FACEBOOK_ID":{
+      "required":true
+    },
+    "FACEBOOK_SECRET":{
+      "required":true
+    },
+    "MONGO":{
+      "required":true
+    }
+  },
+  "addons":[
+    "mongohq"
+  ]
+}
