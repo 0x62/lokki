@@ -1,6 +1,7 @@
 {
-  "name": "hackathon-starter",
-  "version": "3.1.0",
+  "name": "lokki",
+  "version": "1.0.0",
+  "description": "eHealth Dashboard",
   "scripts": {
     "start": "node app.js",
     "test": "mocha --reporter spec --timeout 5000"
