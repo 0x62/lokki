@@ -26,7 +26,8 @@ var assets = require('connect-assets');
  */
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
-var contactController = require('./controllers/contact');
+var countryController = require('./controllers/country');
+var apiController = require('./controllers/api');
 
 /**
  * API keys and Passport configuration.
@@ -55,7 +56,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compress());
 app.use(assets({
-  paths: ['public/css', 'public/js']
+  paths: ['public/admin1/less', 'public/elements/less', 'public/admin1/js', 'public/globals/js', 'public/globals/scripts', 'public/globals/plugins', 'public/globals/less'],
+  compress: true
 }));
 app.use(logger('dev'));
 app.use(favicon(path.join(__dirname, 'public/favicon.png')));
@@ -80,6 +82,7 @@ app.use(lusca({
 }));
 app.use(function(req, res, next) {
   res.locals.user = req.user;
+  res.locals.renderArray = apiController.renderArray;
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
@@ -98,13 +101,16 @@ app.get('/reset/:token', userController.getReset);
 app.post('/reset/:token', userController.postReset);
 app.get('/signup', userController.getSignup);
 app.post('/signup', userController.postSignup);
-app.get('/contact', contactController.getContact);
-app.post('/contact', contactController.postContact);
 app.get('/account', passportConf.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConf.isAuthenticated, userController.postUpdateProfile);
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
+
+/**
+ * Trip routes
+ */
+app.get('/country/:slug', passportConf.isAuthenticated, countryController.getCountry);
 
 /**
  * OAuth authentication routes. (Sign in)

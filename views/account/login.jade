@@ -1,29 +1,56 @@
-extends ../layout
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='csrf-token', content=_csrf)
+    title Login to Lokki
+    != css('admin1')
+    != css('elements')
+    != css('plugins')
 
-block content
-  .page-header
-    h3 Sign in
-  form.form-horizontal(method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
-    .form-group
-      label.col-sm-3.control-label(for='email') Email
-      .col-sm-7
-        input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus=true)
-    .form-group
-      label.col-sm-3.control-label(for='password') Password
-      .col-sm-7
-        input.form-control(type='password', name='password', id='password', placeholder='Password')
-    .form-group
-      .col-sm-offset-3.col-sm-7
-        button.col-sm-3.btn.btn-primary(type='submit')
-          i.fa.fa-user
-          | Login
-        a.btn.btn-link(href='/forgot') Forgot your password?
-    .form-group
-      .col-sm-offset-3.col-sm-7
-        hr
-    .form-group
-      .col-sm-offset-3.col-sm-7
-        a.btn.btn-block.btn-facebook.btn-social(href='/auth/facebook')
-          i.fa.fa-facebook
-          | Sign in with Facebook
+body.bg-login.printable
+  .login-screen.custom-login
+    .panel-login.blur-content
+      .panel-heading
+        img(src='/globals/img/teamfox.png', height='100')
+      #pane-login.panel-body.active
+        h2 Login to Lokki
+        form(method='POST', action='/login')
+          input(type='hidden', name='_csrf', value=_csrf)
+          .form-group
+            .inputer
+              .input-wrapper
+                input.form-control(type='email', placeholder='Email address')
+          .form-group
+            .inputer
+              .input-wrapper
+                input.form-control(type='password', placeholder='Password')
+          .form-buttons
+            .social-accounts
+              .btn-group.btn-merged.btn-group.justified
+                .btn-group
+                  a.btn.btn-block.btn-primary(href='/auth/facebook') <i class="ion-social-facebook"></i> Login with Facebook
+                .btn-group
+                  button.btn.btn-success(type='submit') Login
+
+    
+  .bg-blur.dark
+    .overlay
+
+  svg(version='1.1', xmlns='http://www.w3.org/2000/svg')
+    filter(id='blur')
+      feGaussianBlur(stdDeviation='7')
+
+  != js('global-vendors')
+  != js('user-pages')
+  != js('pleasure')
+  != js('layout')
+
+  script.
+    $(document).ready(function () {
+      Pleasure.init();
+      Layout.init();
+      UserPages.login();
+    });
