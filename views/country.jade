@@ -1,0 +1,246 @@
+extends layout
+
+block content
+  .page-header.full-content.bg-blue
+    .row
+      .col-sm-6
+        h1 
+         | #{country.name}&nbsp;
+         small Travel Summary
+      .col-sm-6
+        ol.breadcrumb
+          li
+            a.active(href='#')
+              i.ion-home
+              | Homepage
+
+  .display-animation
+    | #{JSON.stringify(country)}
+    .row.panel-row.image-row
+      if country.vaccines.entries.most.length > 0 || country.vaccines.entries.some.length > 0
+        .col-md-6
+          .card.xs-margin.material-animate
+            .card-body
+              h4 You may require additional vaccinations
+              p 
+                if country.vaccines.entries.most.length
+                  | Depending on destination, you are likely to need #{renderArray(country.vaccines.entries.most)}.
+                if country.vaccines.entries.some.length
+                  | You may also need #{renderArray(country.vaccines.entries.some)}.
+            .card-footer
+              .btn-group.btn-mearged.btn-group-sm.pull-right
+                button.btn.btn-danger.btn-flat.btn-ripple Don't tell me again
+                button.btn.btn-orange.btn-flat.btn-ripple Remind me later
+                button.btn.btn-primary.btn-ripple More information
+
+      if country.alerts.entries.alert.length >= 2 || country.alerts.entries.warning.length >= 1
+        .col-md-4
+          .card.xs-margin.material-animate
+            .card-body
+              h4 Multiple Level 2 or above warnings
+              p #{country.name} has multiple active health warnings, at Level 2 or higher. See travel alerts for more information.
+            .card-footer
+              .btn-group.btn-merged.btn-group-sm.pull-right
+                button.btn.btn-danger.btn-flat.btn-ripple Don't tell me again
+                button.btn.btn-orange.btn-flat.btn-ripple Remind me later
+
+      if country.alerts.entries.warning.length >= 1
+        .col-md-2
+          .card.xs-margin.card-iconic.card-red.material-animate
+            .card-full-icon.ion-alert
+            .card-body.text-left
+              i.card-icon.ion-alert
+              h4 High risk location
+              p Exercise extreme caution when traveling
+
+    .row.image-row
+      .col-md-9
+        .row.image-row
+          .col-sm-7
+            .card.tile.card-green.card-weather.bg-image.sample-bg-image15.material-animate
+              .card-body
+                .forecast-container
+                  span.temparature #{country.weather.temp} <i class="wi wi-celsius"></i>
+                  span.place #{country.name}
+                  span.forecast #{country.weather.summary}
+              .card-footer
+                .row
+                  .col-xs-3.col-sm-2.animate-item
+                    ul
+                      li MON
+                      li
+                        i.wi.wi-day-sleet-storm
+                      li 18 <i class="wi wi-celsius"></i>
+                  .col-xs-3.col-sm-2.animate-item
+                    ul
+                      li TUE
+                      li
+                        i.wi.wi-day-sleet-storm
+                      li 18 <i class="wi wi-celsius"></i>
+                  .col-xs-3.col-sm-2.animate-item
+                    ul
+                      li WED
+                      li
+                        i.wi.wi-day-sleet-storm
+                      li 18 <i class="wi wi-celsius"></i>
+                  .col-xs-3.col-sm-2.animate-item
+                    ul
+                      li THU
+                      li
+                        i.wi.wi-day-sleet-storm
+                      li 18 <i class="wi wi-celsius"></i>
+                  .col-xs-3.col-sm-2.animate-item
+                    ul
+                      li FRI
+                      li
+                        i.wi.wi-day-sleet-storm
+                      li 18 <i class="wi wi-celsius"></i>
+                  .col-xs-3.col-sm-2.animate-item
+                    ul
+                      li SAT
+                      li
+                        i.wi.wi-day-sleet-storm
+                      li 18 <i class="wi wi-celsius"></i>
+          .col-sm-5
+            .panel.no-margin.material-animate
+              .panel-heading
+                .panel-title <h4>IMPORTANT NEWS</h4>
+              .panel-body.without-padding
+                ul.list-calendar(style='height: 450px')
+                  each item in country.news.entries
+                    li
+                      .date
+                        span.number= item.day
+                        span.text= item.month
+                      .event
+                        .card.card-calendar(class=item.class)
+                          .event-detail
+                            .primary= item.title
+                            .secondary= item.summary
+
+      .col-md-3
+        .row.image-row
+          .col-sm-12
+            .card.tile.card-lime.card-image.material-animate
+              script.
+                window.coords = [#{country.coordinates[0]}, #{country.coordinates[1]}];
+
+              input#pac-input(type='text', placeholder='Investigate places nearby')
+              #gmaps-dashboard.home-map
+        .row.image-row
+          .col-sm-12
+            ul.bxslider.width-percent-100(data-bx-slider-pager='false', data-bx-slider-controls='false', data-bx-slider-auto='true', data-bx-slider-mode='vertical')
+              li
+                .card.tile.card-indigo.card-social.material-animate
+                  .card-body
+                    p Chicago to Barcelona and back equals almost a year of car emissions. Should we think differently about air travel?
+                  .card-footer
+                    ul.inline-list
+                      li <i class="ion-thumbsup"></i> 393
+                      li <i class="ion-android-share"></i> 105
+                  .card-icon
+                    i.ion-social-facebook
+              li
+                .card.tile.card-light-blue.card-social.material-animate
+                  .card-body
+                    p Is #Barcelona becoming too touristic for its own good? Read how locals speak up against unwanted tourists. #travel  
+                  .card-footer
+                    ul.inline-list
+                      li <i class="ion-star"></i> 393
+                      li <i class="ion-share"></i> 105
+                  .card-icon
+                    i.ion-social-twitter
+
+    .row.image-row
+      .col-md-4
+        .panel.no-margin.deep-orange.helper-dashboard-height.material-animate
+          .panel-heading
+            .panel-title <h4>TRAVEL ALERTS</h4>
+          .panel-body.without-padding
+            if !country.alerts.entries.alert.length && !country.alerts.entries.warning.length
+              .alert.alert-info
+                p No active travel warnings issued by CDC, BCA, SafeTravel or FCO.
+            ul.list-material(style='overflow: scroll; height: 280px')
+              each item in country.alerts.entries.alert
+                li.has-action-left.has-action-right
+                  a(href=item.link).visible
+                    .list-action-left
+                      i.ion-alert.icon-circle
+                    .list-content
+                      if item.source == 'cdc'
+                        span.title <span class="label label-warning">CDC</span> #{item.title}
+                        span.caption= item.summary
+                      else if item.source == 'bca'
+                        span.title <span class="label label-primary">BCA</span> #{item.title}
+                    .list-action-right
+                      span.top= item.date
+              
+              each item in country.alerts.entries.warning
+                li.has-action-left.has-action-right
+                  a(href=item.link).visible
+                    .list-action-left
+                      i.ion-close.icon-circle
+                    .list-content
+                      if item.source == 'cdc'
+                        span.title <span class="label label-warning">CDC</span> #{item.title}
+                        span.caption= item.summary
+                      else if item.source == 'bca'
+                        span.title <span class="label label-primary">BCA</span> #{item.title}
+                    .list-action-right
+                      span.top= item.date
+      
+      .col-md-3
+        .panel.no-margin.helper-dashboard-height.material-animate
+          .panel-heading
+            .panel-title <h4>TRAVEL RISK</h4>
+          .panel-body
+            .knob-container.margin-top-10
+              input.knob(data-angleOffset='-125', data-fgColor='#{country.risk.type}', data-angleArc='250', data-readOnly='true', value='#{country.risk.value}')
+            .chart-desc
+              | Calculated from CDC alerts, user reports and UK foreign office
+
+      .col-md-5
+        .panel.no-margin.helper-dashboard-height.material-animate
+          .panel-heading
+            .panel-title <h4>EMERGENCY CONTACTS</h4>
+            ul.nav.nav-tabs.with-panel
+              li.active
+                a.btn-ripple(href='#bca', data-toggle='tab', aria-expanded='false') Bureau of Consular Affairs <span class="ripple _5 animate" style="height: 94px; width: 94px; top: -23px; left: 17.015625px;"></span>
+              li
+                a.btn-ripple(href='#nzst', data-toggle='tab', aria-expanded='false') SafeTravel <span class="ripple _3 animate" style="height: 94px; width: 94px; top: -30px; left: -8.765625px;"></span><span class="ripple _8 animate" style="height: 94px; width: 94px; top: -18px; left: -28.765625px;"></span>
+          .panel-body.without-padding(style='overflow: scroll; height: 245px')
+            .tab-content.with-panel
+              #bca.tab-pane.active
+                ul.list-material
+                  li.has-action-left
+                    a.visible(href='#')
+                      .list-action-left
+                        img.face-radius(src='/globals/img/faces/1.jpg')
+                      .list-content
+                        span.title +(966) (11) 488-3800
+                        span.caption U.S. Embassy Riyadh
+                  li.has-action-left
+                    a.visible(href='#')
+                      .list-action-left
+                        img.face-radius(src='/globals/img/faces/2.jpg')
+                      .list-content
+                        span.title +(966) (11) 488-3800
+                        span.caption U.S. Embassy Riyadh
+                  li.has-action-left
+                    a.visible(href='#')
+                      .list-action-left
+                        img.face-radius(src='/globals/img/faces/3.jpg')
+                      .list-content
+                        span.title +(966) (11) 488-3800
+                        span.caption U.S. Embassy Riyadh
+              #nzst.tab-pane
+                ul.list-material
+                  li.has-action-left
+                    a.visible(href='#')
+                      .list-action-left
+                        img.face-radius(src='/globals/img/faces/1.jpg')
+                      .list-content
+                        span.title +(966) (11) 488-3800
+                        span.caption U.S. Embassy Riyadh
+
+  != js('index')

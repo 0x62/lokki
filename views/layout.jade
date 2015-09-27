@@ -5,15 +5,37 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='csrf-token', content=_csrf)
-    title #{title} - Hackathon Starter
-    != css('main')
+    title #{title} | Lokki
+    != css('admin1')
+    != css('elements')
+    != css('plugins')
   body
     include partials/header
 
-    .container
-      include partials/flash
+    .content
       block content
 
-    include partials/footer
+    <script src="http://maps.google.com/maps/api/js?sensor=true&amp;libraries=places"></script>
+    != js('global-vendors')
+    != js('gmaps/gmaps')
+    != js('bxslider/jquery.bxslider.min')
+    != js('d3/d3')
+    != js('rickshaw/rickshaw.min')
+    != js('jquery-knob/excanvas')
+    != js('jquery-knob/dist/jquery.knob.min')
+    != js('gauge/gauge.min')
+    != js('pleasure')
+    != js('layout')
+    != js('sliders')
+    != js('maps-google')
+    != js('charts-knob')
+    
+    script.
+      $(document).ready(function () {
+        Pleasure.init();
+        Layout.init();
 
-    != js('application')
+        Index.init();
+        ChartsKnob.init();
+
+      });
